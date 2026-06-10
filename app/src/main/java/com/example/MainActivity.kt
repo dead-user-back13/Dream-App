@@ -42,6 +42,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
@@ -691,7 +693,11 @@ fun InterpretTabContent(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Text,
+                            hintLocales = LocaleList("fa")
+                        ),
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         textStyle = MaterialTheme.typography.bodyMedium.copy(
                             lineHeight = 24.sp,
@@ -703,10 +709,58 @@ fun InterpretTabContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        if (appLanguage == "fa") {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                modifier = Modifier.weight(1f).padding(end = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "Keyboard hint",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "کیبورد سیستم روی زبان فارسی تنظیم شده است. برای تغییر زبان دکمه فاصله را نگه دارید.",
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontSize = 11.sp,
+                                        lineHeight = 15.sp
+                                    ),
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                            }
+                        } else {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                modifier = Modifier.weight(1f).padding(end = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "Keyboard hint",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "System keyboard language hints are optimized for seamless multi-platform typing.",
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontSize = 11.sp,
+                                        lineHeight = 15.sp
+                                    ),
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
+                            }
+                        }
+
                         if (userDreamInput.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.onDreamInputChanged("") }) {
+                            IconButton(
+                                onClick = { viewModel.onDreamInputChanged("") },
+                                modifier = Modifier.testTag("clear_input_button")
+                            ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = "Clear input",
